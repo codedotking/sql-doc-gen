@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { type IConnect } from "@/lib/db";
-import { useImmer } from "use-immer"
+import { useImmer } from "use-immer";
 
 const handleSubmit = async (dataForm: IConnect) => {
   const res = await fetch("/api/db", {
@@ -26,22 +26,19 @@ const handleSubmit = async (dataForm: IConnect) => {
 
 export default function DBForm() {
   const [dbForm, setDbForm] = useImmer<IConnect>({
-    host: "xxxxxxxxxxx",
+    host: "",
     port: 3306,
-    database: "v3bms",
-    user: "root",
-    password: "xxxxxxxxxxxxx",
+    database: "",
+    user: "",
+    password: "",
   });
 
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>)=>{
-
-    console.log(event.target);
-    
-    setDbForm((draft) => {
-      // draft[event]
-    })
-  }
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value }: { name: string; value: string } = event.target;
+    setDbForm((draft: any) => {
+      draft[name] = name === "port" ? Number(value) : value;
+    });
+  };
 
   return (
     <Card className="">
@@ -58,6 +55,7 @@ export default function DBForm() {
               type="text"
               placeholder="数据库链接"
               value={dbForm.host}
+              name="host"
               onChange={handleChange}
               required
             />
@@ -69,9 +67,8 @@ export default function DBForm() {
               type="number"
               placeholder="端口"
               value={dbForm.port}
-              onChange={(e) => {
-                dbForm.port = Number(e.target.value);
-              }}
+              name="port"
+              onChange={handleChange}
               required
             />
           </div>
@@ -82,9 +79,8 @@ export default function DBForm() {
               type="text"
               placeholder="数据库"
               value={dbForm.database}
-              onChange={(e) => {
-                dbForm.database = e.target.value;
-              }}
+              name="database"
+              onChange={handleChange}
               required
             />
           </div>
@@ -95,9 +91,8 @@ export default function DBForm() {
               type="text"
               placeholder="数据库用户名"
               value={dbForm.user}
-              onChange={(e) => {
-                dbForm.user = e.target.value;
-              }}
+              name="user"
+              onChange={handleChange}
               required
             />
           </div>
@@ -108,9 +103,8 @@ export default function DBForm() {
               type="password"
               placeholder="数据库密码"
               value={dbForm.password}
-              onChange={(e) => {
-                dbForm.password = e.target.value;
-              }}
+              name="password"
+              onChange={handleChange}
               required
             />
           </div>
