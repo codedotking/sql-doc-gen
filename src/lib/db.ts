@@ -1,7 +1,7 @@
 import mysql from 'mysql2/promise';
 
 
-interface IConnect {
+export type IConnect = {
     host: string;
     port: number;
     database?: string;
@@ -9,13 +9,19 @@ interface IConnect {
     password: string;
 }
 
-export const connect = async (connectInfo:IConnect) => {
+
+/**
+ * 连接数据库
+ * @param connectInfo 
+ * @returns 
+ */
+export const connect = async (connectInfo: IConnect): Promise<mysql.Connection> => {
     const connect = await mysql.createConnection({
-        host: "150.158.95.91",
-        port: 3306,
-        database: "v3bms",
-        user: "root",
-        password: "he..123456"
+        host: connectInfo.host,
+        port: connectInfo.port,
+        database: connectInfo.database,
+        user: connectInfo.user,
+        password: connectInfo.password
     });
     return connect;
 }

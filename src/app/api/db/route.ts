@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connect } from "@/lib/db";
+import { IConnect, connect } from "@/lib/db";
 export async function GET(req: NextRequest) {
     try {
         const db = await connect({
@@ -25,14 +25,14 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
     try {
-        const t = await req.json();
+        const t: IConnect = await req.json();
         console.log(t);
         const db = await connect({
-            host: "xxxxxxxxxxxxxxxxxx",
-            port: 3306,
-            database: "xxxxxxxxxx",
-            user: "root",
-            password: "xxxxxxxxxxxxx"
+            host: t.host,
+            port: t.port,
+            database: t.database,
+            user: t.user,
+            password: t.password
         });
         const [result] = await db.execute("show databases;");
         const [tables] = await db.execute("show tables");
