@@ -28,7 +28,7 @@ export default function DBList({ dbList = [] }) {
     <div className="lg:col-span-2 flex gap-4 flex-col">
       <div className="flex gap-4 items-center">
         <Label htmlFor="databases">数据库</Label>
-        <Select id="databases">
+        <Select>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="请选择导出的数据库" />
           </SelectTrigger>
