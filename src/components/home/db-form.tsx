@@ -11,33 +11,44 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { type IConnect } from "@/lib/db";
 import { useImmer } from "use-immer";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
-const handleSubmit = async (dataForm: IConnect) => {
-  const res = await fetch("/api/db", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(dataForm),
-  });
-  const data = await res.json();
-  console.log(data);
-};
 
-export default function DBForm() {
+export default function DBForm({ setDbList }: { setDbList: Function }) {
   const [dbForm, setDbForm] = useImmer<IConnect>({
-    host: "",
+    host: "xxxxxxxxxxxx",
     port: 3306,
-    database: "",
-    user: "",
-    password: "",
+    database: "xxxxxxxxxxxxx",
+    user: "root",
+    password: "xxxxxxxxxxxxxxxxx",
   });
+
+  const [connectStatus, setConnectStatus] = useImmer(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value }: { name: string; value: string } = event.target;
     setDbForm((draft: any) => {
       draft[name] = name === "port" ? Number(value) : value;
     });
+  };
+
+  const handleSubmit = async (dataForm: IConnect) => {
+    const res = await fetch("/api/db", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataForm),
+    });
+    const {
+      data: { databases = [] },
+      code = 200,
+    } = await res.json();
+    setDbList((draft: any) => {
+      draft.splice(0, draft.length);
+      draft.push(...databases);
+    });
+    setConnectStatus(false);
   };
 
   return (
@@ -109,10 +120,19 @@ export default function DBForm() {
             />
           </div>
           <Button
-            onClick={() => handleSubmit(dbForm)}
+            onClick={() => {
+              setConnectStatus(true);
+              handleSubmit(dbForm)
+            }}
+            disabled={connectStatus}
             type="submit"
             className="w-full">
-            生成
+            {connectStatus ? (
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <></>
+            )}
+            测试连接
           </Button>
         </div>
       </CardContent>
