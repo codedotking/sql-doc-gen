@@ -24,7 +24,6 @@ import {
 import { Label } from "@/components/ui/label";
 
 export default function DBList({ dbList = [] }) {
-  console.log(dbList);
   return (
     <div className="lg:col-span-2 flex gap-4 flex-col">
       <div className="flex gap-4 items-center">
@@ -37,7 +36,7 @@ export default function DBList({ dbList = [] }) {
             {dbList.length > 0 ? (
               dbList.map(({ Database = "" }, index) => {
                 return (
-                  <SelectItem key={index} value={Database}>
+                  <SelectItem key={index} value={Database} className=" cursor-pointer">
                     {Database}
                   </SelectItem>
                 );
